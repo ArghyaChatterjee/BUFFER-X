@@ -1,63 +1,29 @@
-<div align="center">
-    <h1>BUFFER-X (ICCV 2025, 🌟Highlight🌟)</h1>
-    <p align="center">
-      <a href="https://scholar.google.com/citations?user=esoiHnYAAAAJ&hl=en">Minkyun Seo*</a>,
-      <a href="https://scholar.google.com/citations?user=S1A3nbIAAAAJ&hl=en">Hyungtae Lim*</a>,
-      <a href="https://scholar.google.com/citations?user=s-haNkwAAAAJ&hl=en">Kanghee Lee</a>,
-      <a href="https://scholar.google.com/citations?user=U4kKRdMAAAAJ&hl=it">Luca Carlone</a>,
-      <a href="https://scholar.google.com/citations?user=_3q6KBIAAAAJ&hl=en">Jaesik Park</a>
-      <br />
-    </p>
-    <a href="https://github.com/MIT-SPARK/BUFFER-X"><img src="https://img.shields.io/badge/Python-3670A0?logo=python&logoColor=ffdd54" /></a>
-    <a href="https://github.com/MIT-SPARK/BUFFER-X"><img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" /></a>
-    <a href="https://arxiv.org/abs/2503.07940"><img src="https://img.shields.io/badge/arXiv-b33737?logo=arXiv" /></a>
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode"><img src="https://img.shields.io/badge/license-CC4.0-blue.svg" /></a>
-  <br />
-  <br />
-  <p align="center"><img src="https://github.com/user-attachments/assets/8cbc95e2-7dc8-46af-9691-b136eb36caad" alt="BUFFER-X" width="95%"/></p>
-  <p><strong><em>Towards zero-shot and beyond! 🚀 <br>
-  Official repository of BUFFER-X, a zero-shot point cloud registration method<br> across diverse scenes without retraining or tuning.</em></strong></p>
-</div>
+# BUFFER-X 
 
-______________________________________________________________________
+## Requirements
+This work has been tested on Ubuntu 22.04, Cuda 12.1, Nvidia RTX 4070 and Python 3.10.
 
-## 🧭 Structure Overview
+## Install
 
-![fig1](fig/BUFFER-X_Overview.png)
-
-## 💻 Installation of BUFFER-X
-
-#### Set up environment
-
-After cloning this repository:
+Clone and create a virtual environment:
 
 ```
-git clone https://github.com/MIT-SPARK/BUFFER-X && cd BUFFER-X
+git clone https://github.com/ArghyaChatterjee/BUFFER-X 
+cd BUFFER-X
+python3 -m venv buffer_x_venv
+source buffer_x_venv/bin/activate
+pip3 install --upgrade pip setuptools wheel scikit-build-core ninja cmake build
 ```
 
 Setup your **own virtual environment** (e.g., `conda create -n bufferx python=3.x` or setting your Nvidia Docker env.) and then install the required libraries. We present some shellscripts as follows.
-
-**\[Python 3.8, Pytorch 1.9.1, CUDA 11.1 on Ubuntu 22.04\]**
-
 ```
-./scripts/install_py3_8_cuda11_1.sh
-```
-
-**\[Python 3.10, Pytorch 2.7.1, CUDA 11.8, Cudnn 9.1.0 on Ubuntu 24.04\]**
-
-```
-./scripts/install_py3_10_cuda11_8.sh
-```
-
-**\[Python 3.11, Pytorch 2.6.0, CUDA 12.4, Cudnn 9.1.0 on Ubuntu 24.04\]**
-
-```
-./scripts/install_py3_11_cuda12_4.sh
+chmod +x scripts/install_py3_10_cuda12_1.sh
+./scripts/install_py3_10_cuda12_1.sh
 ```
 
 ______________________________________________________________________
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Training and Test
 
@@ -89,105 +55,16 @@ The structure should be as follows:
 </details>
 <br>
 
-Next, to evaluate **BUFFER-X** in diverse scenes, please download the preprocessed data by running the following command. It requires around 130 GB.
-However, to include all other datasets (i.e., `Scannetpp_iphone`, `Scannetpp_faro`), approximately 150 GB more storage is required.
-Due to the data copyrights, we cannot provide preprocessed data for ScanNet++, so if you want to reproduce whole results, please refer to [here](dataset/README.md)
-
+#### Test on 2 PointClouds
+If you have 2 points clouds in `.pcd` format, run the following script:
 ```
-./scripts/download_all_data.sh
+python align_pcds.py \
+  --src /home/arghya/ihmc-repos/ihmc-humanoid-labeler/humanoid_data/2d_3d_data/ZED_03122024_Multi_Object_Recordings/meta_data/mug_mesh_orig_77.pcd \
+  --tgt /home/arghya/ihmc-repos/ihmc-humanoid-labeler/humanoid_data/2d_3d_data/ZED_03122024_Multi_Object_Recordings/meta_data/mug_mesh_roi_77.pcd \
+  --experiment_id threedmatch \
+  --root_dir . \
+  --cfg_dataset 3DMatch \
+  --voxel_size 0.05 \
+  --output_dir aligned_output \
+  --cuda
 ```
-
-Then, you can run the below command as follows:
-
-```
-python test.py --dataset <LIST OF DATASET NAMES> --experiment_id <EXPERIMENT ID> --verbose
-```
-
-Experiment ID refers to the saved model’s filename. Provided snapshots include `threedmatch` and `kitti`, each trained on the corresponding dataset.
-
-e.g.,
-
-```
-python test.py --dataset 3DMatch TIERS Oxford MIT --experiment_id threedmatch --verbose
-```
-
-You can also run the evaluation script for all datasets at once by using the provided script:
-
-```
-./scripts/eval_all.sh <EXPERIMENT ID>
-```
-
-<details>
-  <summary><strong>Detailed explanation about configuration</a></strong></summary>
-
-- `--dataset`: The name of the dataset to test on. Must be one of:
-
-  - `3DMatch`
-  - `3DLoMatch`
-  - `Scannetpp_iphone`
-  - `Scannetpp_faro`
-  - `TIERS`
-  - `KITTI`
-  - `WOD`
-  - `MIT`
-  - `KAIST`
-  - `ETH`
-  - `Oxford`
-
-- `--experiment_id`: The ID of the experiment to use for testing.
-
-Due to the large number and variety of datasets used in our experiments, we provide detailed download instructions and folder structures in a separate document:
-
-[DATASETS.md](dataset/DATASETS.md)
-
-</details>
-<br>
-
-#### Training
-
-BUFFER-X supports training on either the **3DMatch** or **KITTI** dataset. As un example, run the following command to train the model:
-
-```
-python train.py --dataset 3DMatch
-```
-
-______________________________________________________________________
-
-### 📝 Citation
-
-If you find our work useful in your research, please consider citing:
-
-```
-@article{Seo_BUFFERX_arXiv_2025,
-Title={BUFFER-X: Towards Zero-Shot Point Cloud Registration in Diverse Scenes},
-Author={Minkyun Seo and Hyungtae Lim and Kanghee Lee and Luca Carlone and Jaesik Park},
-Journal={2503.07940 (arXiv)},
-Year={2025}
-}
-```
-
-______________________________________________________________________
-
-## 🙏 Acknowledgements
-
-This work was supported by IITP grant (RS-2021-II211343: AI Graduate School Program at Seoul National University) (5%), and by NRF grants funded by the Korea government (MSIT) (No. 2023R1A1C200781211 (65%) and No. RS-2024-00461409 (30%), respectively).
-
-In addition, we appreciate the open-source contributions of previous authors,
-and especially thank [Sheng Ao](https://scholar.google.com/citations?user=cvS1yuMAAAAJ&hl=zh-CN), the first author of [BUFFER](https://github.com/SYSU-SAIL/BUFFER),
-for allowing us to use the term 'BUFFER' as part of the title of our study.
-
-- [FCGF](https://github.com/chrischoy/FCGF)
-- [Vector Neurons](https://github.com/FlyingGiraffe/vnn)
-- [D3Feat](https://github.com/XuyangBai/D3Feat.pytorch)
-- [PointDSC](https://github.com/XuyangBai/PointDSC)
-- [SpinNet](https://github.com/QingyongHu/SpinNet)
-- [GeoTransformer](https://github.com/qinzheng93/GeoTransformer)
-- [RoReg](https://github.com/HpWang-whu/RoReg)
-- [BUFFER](https://github.com/SYSU-SAIL/BUFFER)
-
-______________________________________________________________________
-
-### Updates
-
-- 25/07/2025: This work is selected as a **Highlight** paper at ICCV 2025.
-- 25/06/2025: This work is accepted by ICCV 2025.

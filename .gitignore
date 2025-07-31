@@ -7,7 +7,6 @@ snapshot/
 */build/
 */CMakeFiles/
 
-*.pcd
 *.pth
 *.pyc
 *.ply
@@ -246,3 +245,4 @@ cython_debug/
 nn
 
 !config/splits/*.txt
+buffer_x_venv/

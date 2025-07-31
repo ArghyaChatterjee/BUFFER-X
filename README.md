@@ -59,8 +59,8 @@ The structure should be as follows:
 If you have 2 points clouds in `.pcd` format, run the following script:
 ```
 python align_pcds.py \
-  --src /home/arghya/ihmc-repos/ihmc-humanoid-labeler/humanoid_data/2d_3d_data/ZED_03122024_Multi_Object_Recordings/meta_data/mug_mesh_orig_77.pcd \
-  --tgt /home/arghya/ihmc-repos/ihmc-humanoid-labeler/humanoid_data/2d_3d_data/ZED_03122024_Multi_Object_Recordings/meta_data/mug_mesh_roi_77.pcd \
+  --src /home/arghya/BUFFER-X/input_data/mug_mesh_orig_77.pcd \
+  --tgt /home/arghya/BUFFER-X/input_data/mug_mesh_roi_77.pcd \
   --experiment_id threedmatch \
   --root_dir . \
   --cfg_dataset 3DMatch \

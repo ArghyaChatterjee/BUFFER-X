@@ -56,7 +56,7 @@ The structure should be as follows:
 <br>
 
 #### Test on 2 PointClouds
-If you have 2 points clouds in `.pcd` format, run the following script:
+If you have 2 point clouds in `.pcd` format, run the following script:
 ```
 python align_pcds.py \
   --src /home/arghya/BUFFER-X/input_data/mug_mesh_orig_77.pcd \
@@ -67,4 +67,10 @@ python align_pcds.py \
   --voxel_size 0.05 \
   --output_dir aligned_output \
   --cuda
+```
+The output will be saved inside `aligned_output` directory. The outputs are:
+```
+estimated_transform.txt
+merged.pcd
+source_aligned.pcd
 ```
